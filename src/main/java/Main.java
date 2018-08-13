@@ -75,7 +75,6 @@ public class Main {
     private static void testCriteria() {
         Session session = ourSessionFactory.openSession();
         EntityManager em = ourSessionFactory.createEntityManager();
-        Transaction transaction = null;
         try {
             CriteriaQuery<Pet> criteriaQuery = em.getCriteriaBuilder().createQuery(Pet.class);
             Root<Pet> root = criteriaQuery.from(Pet.class);
