@@ -1,16 +1,26 @@
-package main;
+package model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * Класс пользователя имени, фамилии, возраста, а так же список питомцев
+ */
 
 @Entity
-@Table(name = "users", schema = "hibernate", catalog = "")
-public class UsersEntity {
+@Table(name = "users", schema = "hibernate")
+public class User {
     private int id;
     private String name;
     private String surname;
     private int age;
+    private Set<Pet> pets = new HashSet<Pet>();
+
+    public User() {}
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public int getId() {
         return id;
@@ -50,12 +60,21 @@ public class UsersEntity {
         this.age = age;
     }
 
+    @OneToMany(mappedBy = "owner", orphanRemoval = true)
+    public Set<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(Set<Pet> pets) {
+        this.pets = pets;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UsersEntity that = (UsersEntity) o;
+        User that = (User) o;
 
         if (id != that.id) return false;
         if (age != that.age) return false;
@@ -72,5 +91,10 @@ public class UsersEntity {
         result = 31 * result + (surname != null ? surname.hashCode() : 0);
         result = 31 * result + age;
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + surname + ": " + age;
     }
 }
